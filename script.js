@@ -1,5 +1,5 @@
 // Replace with your actual Stripe publishable key
-const STRIPE_PUBLISHABLE_KEY = 'pk_test_your_stripe_publishable_key_here';
+const STRIPE_PUBLISHABLE_KEY = 'pk_test_51S9N2hGF2WhOnD1pKtBgXc2IdcBnbNMdnoqamS8l5Auz8Q14crxdT3A7wRrrHornMnDXVT79rRmXUUIipCpP7Lsd004rMhHSXr';
 
 // Initialize Stripe
 const stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
