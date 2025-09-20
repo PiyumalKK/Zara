@@ -2,6 +2,54 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Map of plan names to pricing
+const PLAN_CONFIG = {
+    'price_basic': { amount: 999, name: 'Early Access' },
+    'price_premium': { amount: 1999, name: 'VIP Access' },
+    'price_ultimate': { amount: 3999, name: 'Ultimate' }
+};
+
+async function getOrCreatePrice(planId) {
+    const config = PLAN_CONFIG[planId];
+    if (!config) {
+        throw new Error(`Invalid plan ID: ${planId}`);
+    }
+
+    try {
+        // Try to find existing price first
+        const existingPrices = await stripe.prices.list({ 
+            limit: 100,
+            expand: ['data.product']
+        });
+
+        for (const price of existingPrices.data) {
+            if (price.product.name === config.name && 
+                price.unit_amount === config.amount &&
+                price.recurring?.interval === 'month') {
+                return price.id;
+            }
+        }
+
+        // If not found, create new product and price
+        const product = await stripe.products.create({
+            name: config.name,
+            description: `${config.name} subscription plan`,
+        });
+
+        const price = await stripe.prices.create({
+            product: product.id,
+            unit_amount: config.amount,
+            currency: 'usd',
+            recurring: { interval: 'month' },
+        });
+
+        return price.id;
+    } catch (error) {
+        console.error(`Error getting/creating price for ${planId}:`, error);
+        throw error;
+    }
+}
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -47,11 +95,14 @@ export default async function handler(req, res) {
             });
         }
 
+        // Get or create the real price ID
+        const realPriceId = await getOrCreatePrice(priceId);
+
         // Create subscription
         const subscription = await stripe.subscriptions.create({
             customer: customer.id,
             items: [{
-                price: priceId,
+                price: realPriceId,
             }],
             expand: ['latest_invoice.payment_intent'],
             payment_behavior: 'default_incomplete',
