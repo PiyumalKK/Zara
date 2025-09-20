@@ -124,16 +124,26 @@ export default async function handler(req, res) {
                 customer_id: customer.id,
             });
         } else {
+            console.error('Payment intent status:', paymentIntent.status);
             return res.status(400).json({
                 error: 'Payment failed. Please try again.',
+                details: `Payment status: ${paymentIntent.status}`,
             });
         }
 
     } catch (error) {
         console.error('Subscription creation error:', error);
         
+        // Provide more detailed error information
+        const errorDetails = {
+            message: error.message || 'An error occurred while creating the subscription.',
+            type: error.type || 'unknown_error',
+            code: error.code || 'unknown_code'
+        };
+        
         return res.status(500).json({
-            error: error.message || 'An error occurred while creating the subscription.',
+            error: errorDetails.message,
+            details: errorDetails,
         });
     }
 }
