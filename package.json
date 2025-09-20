@@ -1,6 +1,7 @@
 {
   "name": "zara-landing-page",
   "version": "1.0.0",
+  "type": "module",
   "description": "A clean and responsive landing page for Zara with Stripe subscription integration",
   "main": "index.html",
   "scripts": {
