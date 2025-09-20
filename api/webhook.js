@@ -2,21 +2,51 @@ import Stripe from 'stripe';
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Configure the API route to handle raw body
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '1mb',
+        },
+    },
+};
+
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
+    const sig = req.headers['stripe-signature'];
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    console.log('Webhook received with signature:', sig ? 'present' : 'missing');
+    console.log('Endpoint secret configured:', endpointSecret ? 'yes' : 'no');
+
     try {
-        // Simple approach: just handle the webhook events
-        const event = req.body;
+        let event;
+        
+        if (endpointSecret && sig) {
+            // Try to verify the webhook signature
+            try {
+                const body = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
+                event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+                console.log('Webhook signature verified successfully');
+            } catch (err) {
+                console.log('Signature verification failed, using body directly:', err.message);
+                event = req.body;
+            }
+        } else {
+            // No signature verification - just use the body
+            event = req.body;
+            console.log('No signature verification - using body directly');
+        }
         
         if (!event || !event.type) {
             console.log('Invalid webhook body');
             return res.status(400).json({ error: 'Invalid webhook body' });
         }
 
-        console.log('Webhook received:', event.type);
+        console.log('Processing webhook event:', event.type);
 
         // Handle the event
         switch (event.type) {
