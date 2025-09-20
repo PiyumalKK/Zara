@@ -56,11 +56,16 @@ export default async function handler(req, res) {
     }
 
     try {
+        console.log('Request body:', req.body);
         const { paymentMethodId, priceId, email } = req.body;
 
+        console.log('Extracted data:', { paymentMethodId, priceId, email });
+
         if (!paymentMethodId || !priceId || !email) {
+            console.log('Missing required fields');
             return res.status(400).json({ 
-                error: 'Missing required fields: paymentMethodId, priceId, or email' 
+                error: 'Missing required fields: paymentMethodId, priceId, or email',
+                received: { paymentMethodId: !!paymentMethodId, priceId: !!priceId, email: !!email }
             });
         }
 
@@ -96,9 +101,12 @@ export default async function handler(req, res) {
         }
 
         // Get or create the real price ID
+        console.log('Getting/creating price for:', priceId);
         const realPriceId = await getOrCreatePrice(priceId);
+        console.log('Real price ID:', realPriceId);
 
         // Create subscription
+        console.log('Creating subscription...');
         const subscription = await stripe.subscriptions.create({
             customer: customer.id,
             items: [{
@@ -107,6 +115,8 @@ export default async function handler(req, res) {
             expand: ['latest_invoice.payment_intent'],
             payment_behavior: 'default_incomplete',
         });
+
+        console.log('Subscription created:', subscription.id);
 
         const invoice = subscription.latest_invoice;
         const paymentIntent = invoice.payment_intent;
