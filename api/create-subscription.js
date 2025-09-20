@@ -105,7 +105,7 @@ export default async function handler(req, res) {
         const realPriceId = await getOrCreatePrice(priceId);
         console.log('Real price ID:', realPriceId);
 
-        // Create subscription
+        // Create subscription with automatic payment
         console.log('Creating subscription...');
         const subscription = await stripe.subscriptions.create({
             customer: customer.id,
@@ -114,6 +114,15 @@ export default async function handler(req, res) {
             }],
             expand: ['latest_invoice.payment_intent'],
             payment_behavior: 'default_incomplete',
+            payment_settings: {
+                payment_method_options: {
+                    card: {
+                        request_three_d_secure: 'if_required',
+                    },
+                },
+                payment_method_types: ['card'],
+                save_default_payment_method: 'on_subscription',
+            },
         });
 
         console.log('Subscription created:', subscription.id);
@@ -121,7 +130,29 @@ export default async function handler(req, res) {
         const invoice = subscription.latest_invoice;
         const paymentIntent = invoice.payment_intent;
 
-        if (paymentIntent.status === 'requires_action') {
+        console.log('Payment intent status:', paymentIntent.status);
+
+        // Try to confirm the payment intent immediately if it requires confirmation
+        if (paymentIntent.status === 'requires_confirmation') {
+            const confirmedPaymentIntent = await stripe.paymentIntents.confirm(paymentIntent.id);
+            console.log('Payment intent confirmed:', confirmedPaymentIntent.status);
+            
+            if (confirmedPaymentIntent.status === 'requires_action') {
+                return res.status(200).json({
+                    status: 'requires_action',
+                    client_secret: confirmedPaymentIntent.client_secret,
+                    subscription_id: subscription.id,
+                });
+            } else if (confirmedPaymentIntent.status === 'succeeded') {
+                return res.status(200).json({
+                    status: 'succeeded',
+                    subscription_id: subscription.id,
+                    customer_id: customer.id,
+                });
+            }
+        }
+
+        if (paymentIntent.status === 'requires_action' || paymentIntent.status === 'requires_source_action') {
             return res.status(200).json({
                 status: 'requires_action',
                 client_secret: paymentIntent.client_secret,
