@@ -105,7 +105,7 @@ export default async function handler(req, res) {
         const realPriceId = await getOrCreatePrice(priceId);
         console.log('Real price ID:', realPriceId);
 
-        // Create subscription with automatic payment
+        // Create subscription with simplified settings
         console.log('Creating subscription...');
         const subscription = await stripe.subscriptions.create({
             customer: customer.id,
@@ -114,15 +114,6 @@ export default async function handler(req, res) {
             }],
             expand: ['latest_invoice.payment_intent'],
             payment_behavior: 'default_incomplete',
-            payment_settings: {
-                payment_method_options: {
-                    card: {
-                        request_three_d_secure: 'if_required',
-                    },
-                },
-                payment_method_types: ['card'],
-                save_default_payment_method: 'on_subscription',
-            },
         });
 
         console.log('Subscription created:', subscription.id);
