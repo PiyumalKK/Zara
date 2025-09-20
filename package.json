@@ -1,0 +1,17 @@
+{
+  "name": "zara-landing-page",
+  "version": "1.0.0",
+  "description": "A clean and responsive landing page for Zara",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "build": "echo 'No build step required for static site'",
+    "start": "npx serve ."
+  },
+  "keywords": ["zara", "landing-page", "responsive", "vercel"],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}

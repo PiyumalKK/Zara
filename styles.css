@@ -1,0 +1,207 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    font-family: 'Arial', sans-serif;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    overflow-x: hidden;
+}
+
+/* Main container */
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+/* Logo section */
+.logo-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.logo {
+    font-size: 4rem;
+    font-weight: bold;
+    letter-spacing: 8px;
+    color: #FFD700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+
+.tagline {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    color: #ffffff;
+    opacity: 0.9;
+}
+
+/* Code section */
+.code-section {
+    width: 100%;
+    max-width: 400px;
+}
+
+.code-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 12px;
+    padding: 30px;
+    backdrop-filter: blur(10px);
+}
+
+.code-label {
+    display: block;
+    font-size: 1.1rem;
+    color: #FFD700;
+    margin-bottom: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+.code-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.code-input {
+    width: 100%;
+    padding: 15px 20px;
+    font-size: 1rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 8px;
+    color: #ffffff;
+    transition: all 0.3s ease;
+}
+
+.code-input:focus {
+    outline: none;
+    border-color: #FFD700;
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.code-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.code-submit {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    background-color: #FFD700;
+    color: #000000;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.code-submit:hover {
+    background-color: #FFC700;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.code-submit:active {
+    transform: translateY(0);
+}
+
+/* Responsive design for tablets */
+@media (max-width: 768px) {
+    .container {
+        padding: 30px 15px;
+    }
+    
+    .logo {
+        font-size: 3rem;
+        letter-spacing: 6px;
+        margin-bottom: 15px;
+    }
+    
+    .tagline {
+        font-size: 1.3rem;
+        letter-spacing: 1.5px;
+    }
+    
+    .code-container {
+        padding: 25px;
+    }
+    
+    .code-section {
+        max-width: 350px;
+    }
+}
+
+/* Responsive design for mobile phones */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 10px;
+    }
+    
+    .logo {
+        font-size: 2.5rem;
+        letter-spacing: 4px;
+        margin-bottom: 12px;
+    }
+    
+    .tagline {
+        font-size: 1.1rem;
+        letter-spacing: 1px;
+    }
+    
+    .code-container {
+        padding: 20px;
+    }
+    
+    .code-label {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .code-input, .code-submit {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+    
+    .code-section {
+        max-width: 300px;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 320px) {
+    .logo {
+        font-size: 2rem;
+        letter-spacing: 3px;
+    }
+    
+    .tagline {
+        font-size: 1rem;
+    }
+    
+    .code-container {
+        padding: 15px;
+    }
+}
