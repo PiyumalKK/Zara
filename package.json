@@ -1,16 +1,19 @@
 {
   "name": "zara-landing-page",
   "version": "1.0.0",
-  "description": "A clean and responsive landing page for Zara",
+  "description": "A clean and responsive landing page for Zara with Stripe subscription integration",
   "main": "index.html",
   "scripts": {
     "dev": "npx serve .",
     "build": "echo 'No build step required for static site'",
     "start": "npx serve ."
   },
-  "keywords": ["zara", "landing-page", "responsive", "vercel"],
+  "keywords": ["zara", "landing-page", "responsive", "vercel", "stripe", "subscription"],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  },
   "devDependencies": {
     "serve": "^14.0.0"
   }

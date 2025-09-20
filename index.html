@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZARA - Change is coming.</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
     <main class="container">
@@ -13,21 +14,106 @@
             <p class="tagline">Change is coming.</p>
         </header>
         
+        <!-- Subscription Plans Section -->
+        <section class="subscription-section">
+            <h2 class="subscription-title">Choose Your Access</h2>
+            <div class="pricing-cards">
+                <div class="pricing-card" data-plan="basic">
+                    <h3 class="plan-name">Early Access</h3>
+                    <div class="plan-price">
+                        <span class="price">$9.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>First to know about new collections</li>
+                        <li>Exclusive previews</li>
+                        <li>Member-only events</li>
+                    </ul>
+                    <button class="plan-button" data-price="price_basic">Subscribe Now</button>
+                </div>
+                
+                <div class="pricing-card featured" data-plan="premium">
+                    <div class="featured-badge">Most Popular</div>
+                    <h3 class="plan-name">VIP Access</h3>
+                    <div class="plan-price">
+                        <span class="price">$19.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Everything in Early Access</li>
+                        <li>Personal styling sessions</li>
+                        <li>Free shipping & returns</li>
+                        <li>Limited edition items</li>
+                    </ul>
+                    <button class="plan-button" data-price="price_premium">Subscribe Now</button>
+                </div>
+                
+                <div class="pricing-card" data-plan="ultimate">
+                    <h3 class="plan-name">Ultimate</h3>
+                    <div class="plan-price">
+                        <span class="price">$39.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                    <ul class="plan-features">
+                        <li>Everything in VIP Access</li>
+                        <li>Quarterly style box</li>
+                        <li>Priority customer service</li>
+                        <li>Invitation-only fashion shows</li>
+                    </ul>
+                    <button class="plan-button" data-price="price_ultimate">Subscribe Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Payment Modal -->
+        <div id="payment-modal" class="payment-modal">
+            <div class="payment-content">
+                <span class="close-modal">&times;</span>
+                <h3 class="payment-title">Complete Your Subscription</h3>
+                <div class="selected-plan-info">
+                    <span class="selected-plan-name"></span>
+                    <span class="selected-plan-price"></span>
+                </div>
+                
+                <form id="payment-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-element">Card Information</label>
+                        <div id="card-element">
+                            <!-- Stripe Elements will create form elements here -->
+                        </div>
+                        <div id="card-errors" role="alert"></div>
+                    </div>
+                    
+                    <button type="submit" id="submit-payment" class="payment-submit">
+                        <span id="button-text">Subscribe Now</span>
+                        <div id="spinner" class="spinner hidden"></div>
+                    </button>
+                </form>
+            </div>
+        </div>
+        
         <footer class="code-section">
             <div class="code-container">
-                <label for="code-input" class="code-label">Enter Code</label>
+                <label for="code-input" class="code-label">Have a promo code?</label>
                 <div class="code-input-group">
                     <input 
                         type="text" 
                         id="code-input" 
                         class="code-input" 
-                        placeholder="Enter your code here"
+                        placeholder="Enter your promo code"
                         maxlength="20"
                     >
-                    <button type="button" class="code-submit">Submit</button>
+                    <button type="button" class="code-submit">Apply</button>
                 </div>
             </div>
         </footer>
     </main>
+    
+    <script src="script.js"></script>
 </body>
 </html>
