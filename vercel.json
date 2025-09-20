@@ -1,10 +1,10 @@
 {
-  "name": "zara-landing-page",
-  "version": 2,
-  "builds": [
-    {
-      "src": "**",
-      "use": "@vercel/static"
+  "functions": {
+    "api/create-subscription.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/webhook.js": {
+      "runtime": "nodejs18.x"
     }
-  ]
+  }
 }
